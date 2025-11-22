@@ -65,7 +65,7 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
 
-      - name: Deploy to Elastic Beanstalk
+      - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -75,5 +75,7 @@ jobs:
           version_label: ${{ github.run_id }}
           region: ap-south-1
           deployment_package: deploy.zip
+          bucket_name: elasticbeanstalk-us-east-1-298371018623
           wait_for_environment: false
+
 
