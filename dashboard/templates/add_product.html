@@ -1,0 +1,30 @@
+
+
+<!-- add_product.html - Add New Product -->
+{% extends "dashboard.html" %}
+
+{% block content %}
+<style>
+    .add-form .form-control, .add-form .form-select {
+        margin-bottom: 20px;
+    }
+    .add-form label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 8px;
+    }
+</style>
+
+<div class="add-form">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <div class="form-group mt-4">
+            <button class="btn btn-primary w-100" type="submit">
+                <i class="material-icons" style="vertical-align: middle;">add_circle</i>
+                Add Product
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

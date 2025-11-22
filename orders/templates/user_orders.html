@@ -1,0 +1,166 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .orders-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    .orders-title {
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .order-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 30px;
+        transition: all 0.3s ease;
+    }
+    .order-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+    }
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e2e8f0;
+    }
+    .order-id {
+        font-weight: 700;
+        color: #667eea;
+        font-size: 1.1rem;
+    }
+    .status-badge {
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+    .status-success {
+        background: #c6f6d5;
+        color: #22543d;
+    }
+    .status-cancelled {
+        background: #fed7d7;
+        color: #742a2a;
+    }
+    .order-item {
+        background: #f7fafc;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-left: 4px solid #667eea;
+    }
+    .order-item:last-child {
+        margin-bottom: 0;
+    }
+    .product-name {
+        color: #2d3748;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+    }
+    .product-name:hover {
+        color: #667eea;
+    }
+    .item-detail {
+        color: #718096;
+        margin: 5px 0;
+    }
+    .item-detail strong {
+        color: #2d3748;
+    }
+    .order-total {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 20px;
+        text-align: right;
+    }
+    .order-total-amount {
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+    .empty-orders {
+        text-align: center;
+        padding: 100px 20px;
+    }
+    .empty-orders i {
+        font-size: 120px;
+        color: #cbd5e0;
+        margin-bottom: 30px;
+    }
+    .empty-orders h3 {
+        color: #718096;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+</style>
+
+{% if orders %}
+<div class="orders-header">
+    <h1 class="orders-title">📦 My Orders</h1>
+    <p class="text-muted" style="font-size: 1.2rem;">{{ orders|length }} order{{ orders|length|pluralize }} found</p>
+</div>
+
+{% for order in orders %}
+<div class="order-card">
+    <div class="order-header">
+        <div>
+            <div class="order-id">Order #{{ order.id }}</div>
+        </div>
+        <div>
+            {% if order.status %}
+            <span class="status-badge status-success">✓ Successful</span>
+            {% else %}
+            <span class="status-badge status-cancelled">✕ Cancelled</span>
+            {% endif %}
+        </div>
+    </div>
+
+    {% for item in order.items.all %}
+    <div class="order-item">
+        <div class="mb-2">
+            <a class="product-name" href="{{ item.product.get_absolute_url }}">
+                {{ item.product.title }}
+            </a>
+        </div>
+        <div class="item-detail">
+            <strong>Price:</strong> ${{ item.price }}
+        </div>
+        <div class="item-detail">
+            <strong>Quantity:</strong> {{ item.quantity }}
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="order-total">
+        <div>Total Amount</div>
+        <div class="order-total-amount">${{ order.get_total_price }}</div>
+    </div>
+</div>
+{% endfor %}
+
+{% else %}
+<div class="empty-orders">
+    <i class="material-icons">shopping_bag</i>
+    <h3>No Orders Yet!</h3>
+    <p class="text-muted mb-4">You haven't placed any orders yet. Start shopping now!</p>
+    <a href="{% url 'shop:home_page' %}" class="btn btn-gradient btn-lg px-5">
+        Start Shopping
+    </a>
+</div>
+{% endif %}
+{% endblock %}

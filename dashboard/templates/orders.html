@@ -1,0 +1,151 @@
+
+
+ {% extends "dashboard.html" %}
+
+{% block content %}
+<style>
+    .orders-table {
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+    .orders-table thead th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px;
+        font-weight: 600;
+        border: none;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+    }
+    .orders-table thead th:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+    .orders-table thead th:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+    .orders-table tbody tr {
+        background: #f8f9fa;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    .orders-table tbody tr:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.15);
+    }
+    .orders-table tbody td {
+        padding: 20px;
+        vertical-align: middle;
+        border: none;
+    }
+    .orders-table tbody tr td:first-child {
+        border-radius: 10px 0 0 10px;
+        font-weight: 700;
+        color: #667eea;
+    }
+    .orders-table tbody tr td:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+    .user-name {
+        color: #2d3748;
+        font-weight: 600;
+    }
+    .order-id {
+        font-family: 'Courier New', monospace;
+        background: #edf2f7;
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-weight: 600;
+        color: #4a5568;
+    }
+    .total-price {
+        color: #48bb78;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+    .status-badge {
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-block;
+    }
+    .status-success {
+        background: #c6f6d5;
+        color: #22543d;
+    }
+    .status-cancelled {
+        background: #fed7d7;
+        color: #742a2a;
+    }
+    .detail-link {
+        background: #bee3f8;
+        color: #2c5282;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+    .detail-link:hover {
+        background: #4299e1;
+        color: white;
+        transform: scale(1.05);
+    }
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+    .empty-state i {
+        font-size: 80px;
+        color: #cbd5e0;
+        margin-bottom: 20px;
+    }
+</style>
+
+{% if orders %}
+<table class="table orders-table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Customer</th>
+            <th scope="col">Order ID</th>
+            <th scope="col">Total Price</th>
+            <th scope="col">Status</th>
+            <th scope="col" class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td class="user-name">{{ order.user.full_name }}</td>
+            <td>
+                <span class="order-id">#{{ order.id }}</span>
+            </td>
+            <td class="total-price">${{ order.get_total_price }}</td>
+            <td>
+                {% if order.status %}
+                <span class="status-badge status-success">✓ Successful</span>
+                {% else %}
+                <span class="status-badge status-cancelled">✕ Canceled</span>
+                {% endif %}
+            </td>
+            <td class="text-center">
+                <a href="{% url 'dashboard:order_detail' order.id %}" class="detail-link">
+                    View Details
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+    <i class="material-icons">receipt_long</i>
+    <h4 class="text-muted">No Orders Found</h4>
+    <p class="text-muted">Orders will appear here once customers make purchases.</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,12 @@
+django
+crispy-bootstrap4
+boto3
+pillow
+django-crispy-forms
+asgiref==3.4.1
+sqlparse==0.4.2
+cart-total-items
+psycopg
+aws-psycopg2
+psycopg2-binary
+requests

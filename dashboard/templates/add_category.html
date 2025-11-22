@@ -1,0 +1,30 @@
+
+
+<!-- add_category.html - Add New Category -->
+{% extends "dashboard.html" %}
+
+{% block content %}
+<style>
+    .category-form .form-control, .category-form .form-select {
+        margin-bottom: 20px;
+    }
+    .category-form label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 8px;
+    }
+</style>
+
+<div class="category-form">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <div class="form-group mt-4">
+            <button class="btn btn-primary w-100" type="submit">
+                <i class="material-icons" style="vertical-align: middle;">category</i>
+                Add Category
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

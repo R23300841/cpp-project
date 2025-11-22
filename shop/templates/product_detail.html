@@ -1,0 +1,164 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .product-detail-card {
+        background: linear-gradient(135deg, #f6f9fc 0%, #ffffff 100%);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .product-image-container {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        position: relative;
+    }
+    .product-image-container img {
+        transition: transform 0.5s ease;
+    }
+    .product-image-container:hover img {
+        transform: scale(1.05);
+    }
+    .category-badge {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 25px;
+        display: inline-block;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    .category-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    .product-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin: 20px 0;
+    }
+    .product-price {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .product-description {
+        color: #4a5568;
+        line-height: 1.8;
+        font-size: 1.05rem;
+        margin: 30px 0;
+    }
+    .quantity-input {
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 10px;
+        width: 100px;
+        font-weight: 600;
+    }
+    .related-products-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin: 60px 0 30px 0;
+        text-align: center;
+    }
+    .related-card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    .related-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+    }
+</style>
+
+<div class="row mb-5">
+    <!-- Product Details -->
+    <div class="col-lg-6 mb-4">
+        <div class="product-detail-card">
+            <!-- Category Badge -->
+            <div class="mb-3">
+                <a href="{% url 'shop:filter_by_category' product.category.slug %}" class="category-badge">
+                    📁 {{ product.category }}
+                </a>
+            </div>
+
+            <!-- Product Title -->
+            <h1 class="product-title">{{ product.title }}</h1>
+
+            <!-- Price -->
+            <div class="product-price mb-4">
+                ${{ product.price }}
+            </div>
+
+            <!-- Description -->
+            <div class="product-description">
+                {{ product.description }}
+            </div>
+
+            <!-- Add to Cart Form -->
+            <form method="post" action="{% url 'cart:add_to_cart' product.id %}" class="mb-4">
+                {% csrf_token %}
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <label class="fw-bold">Quantity:</label>
+                    {{ form }}
+                </div>
+                <button type="submit" class="btn btn-gradient btn-lg w-100 mb-3">
+                    🛒 Add to Cart
+                </button>
+            </form>
+
+            <!-- Favorites Button -->
+            {% if favorites == 'remove' %}
+            <a href="{% url 'shop:remove_from_favorites' product.id %}" class="btn btn-outline-danger btn-lg w-100">
+                💔 Remove from Favorites
+            </a>
+            {% else %}
+            <a href="{% url 'shop:add_to_favorites' product.id %}" class="btn btn-outline-gradient btn-lg w-100">
+                ❤️ Add to Favorites
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Product Image -->
+    <div class="col-lg-6 mb-4">
+        <div class="product-image-container">
+            <img src="{{ product.image.url }}" class="img-fluid w-100" alt="{{ product.title }}" style="object-fit: cover; height: 600px;">
+        </div>
+    </div>
+</div>
+
+<!-- Related Products -->
+<h2 class="related-products-title">You May Also Like</h2>
+<div class="row g-4 mb-5">
+    {% for p in related_products %}
+    {% if p != product %}
+    <div class="col-lg-3 col-md-4 col-sm-6">
+        <div class="card related-card">
+            <img src="{{ p.image.url }}" class="card-img-top" alt="{{ p.title }}" style="object-fit: cover; height: 200px;">
+            <div class="card-body text-center">
+                <h5 class="fw-bold">{{ p.title }}</h5>
+                <p class="text-muted mb-3">${{ p.price }}</p>
+                <a href="{{ p.get_absolute_url }}" class="btn btn-gradient w-100">
+                    View Details
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

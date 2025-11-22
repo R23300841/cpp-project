@@ -1,0 +1,138 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .checkout-container {
+        max-width: 700px;
+        margin: 60px auto;
+        background: white;
+        border-radius: 25px;
+        padding: 50px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+    .checkout-icon {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .checkout-icon i {
+        font-size: 80px;
+        color: #667eea;
+    }
+    .checkout-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .amount-section {
+        background: linear-gradient(135deg, #f6f9fc 0%, #ffffff 100%);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        margin-bottom: 40px;
+        border: 2px solid #e2e8f0;
+    }
+    .amount-label {
+        color: #718096;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+    .amount-value {
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .confirmation-text {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #2d3748;
+        font-weight: 600;
+        margin-bottom: 40px;
+    }
+    .action-buttons {
+        display: flex;
+        gap: 20px;
+    }
+    .btn-back {
+        background: white;
+        border: 2px solid #e53e3e;
+        color: #e53e3e;
+        font-weight: 600;
+        padding: 15px 30px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        flex: 1;
+    }
+    .btn-back:hover {
+        background: #e53e3e;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(229, 62, 62, 0.3);
+    }
+    .btn-continue {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 15px 30px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        flex: 1;
+    }
+    .btn-continue:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    .info-box {
+        background: #edf2f7;
+        border-left: 4px solid #667eea;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+    }
+    .info-box p {
+        margin: 0;
+        color: #4a5568;
+        font-size: 0.95rem;
+    }
+</style>
+
+<div class="checkout-container">
+    <div class="checkout-icon">
+        <i class="material-icons">payment</i>
+    </div>
+    
+    <h1 class="checkout-title">Checkout</h1>
+    
+    <div class="amount-section">
+        <div class="amount-label">Order Total</div>
+        <div class="amount-value">${{ order.get_total_price }}</div>
+    </div>
+
+    <div class="info-box">
+        <p>📌 Your order is ready for payment. Please review the amount and proceed to complete your purchase.</p>
+    </div>
+    
+    <div class="confirmation-text">
+        Do you want to continue and pay?
+    </div>
+    
+    <div class="action-buttons">
+        <a href="{% url 'cart:show_cart' %}" class="btn btn-back">
+            ← Back to Cart
+        </a>
+        <a href="{% url 'orders:create_order' %}" class="btn btn-continue">
+            Continue & Pay →
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+
+<!-- order_detail.html - Order Detail View (Dashboard) -->
+{% extends "dashboard.html" %}
+
+{% block content %}
+<style>
+    .order-status {
+        text-align: center;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+    .status-success-box {
+        background: #c6f6d5;
+        border: 2px solid #48bb78;
+    }
+    .status-success-box h4 {
+        color: #22543d;
+        font-weight: 700;
+        font-size: 2rem;
+        margin: 0;
+    }
+    .status-cancelled-box {
+        background: #fed7d7;
+        border: 2px solid #e53e3e;
+    }
+    .status-cancelled-box h3 {
+        color: #742a2a;
+        font-weight: 700;
+        font-size: 2rem;
+        margin: 0;
+    }
+    .order-item-card {
+        background: linear-gradient(135deg, #f6f9fc 0%, #ffffff 100%);
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        border-left: 5px solid #667eea;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    }
+    .order-item-card p {
+        margin: 10px 0;
+        color: #4a5568;
+        font-weight: 500;
+    }
+    .order-item-card a {
+        color: #667eea;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .order-item-card a:hover {
+        color: #764ba2;
+        text-decoration: underline;
+    }
+    .order-total-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 15px;
+        margin-top: 30px;
+    }
+    .order-total-card h4 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+    }
+</style>
+
+<div class="order-status {% if order.status %}status-success-box{% else %}status-cancelled-box{% endif %}">
+    {% if order.status %}
+    <h4>✓ Order Successful</h4>
+    {% else %}
+    <h3>✕ Order Cancelled</h3>
+    {% endif %}
+</div>
+
+{% for item in items %}
+<div class="order-item-card">
+    <p><strong>Product:</strong> <a href="{{ item.product.get_absolute_url }}">{{ item.product.title }}</a></p>
+    <p><strong>Price:</strong> ${{ item.price }}</p>
+    <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+</div>
+{% endfor %}
+
+<div class="order-total-card">
+    <h4>Total Amount: ${{ order.get_total_price }}</h4>
+</div>
+{% endblock %}

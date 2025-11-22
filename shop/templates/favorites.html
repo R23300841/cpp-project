@@ -1,0 +1,143 @@
+
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .favorites-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    .favorites-title {
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+    }
+    .favorites-subtitle {
+        color: #718096;
+        font-size: 1.2rem;
+    }
+    .favorite-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: white;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        height: 100%;
+    }
+    .favorite-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
+    }
+    .card-image-wrapper {
+        position: relative;
+        overflow: hidden;
+        height: 250px;
+    }
+    .card-image-wrapper img {
+        transition: transform 0.5s ease;
+    }
+    .favorite-card:hover .card-image-wrapper img {
+        transform: scale(1.1);
+    }
+    .favorite-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 50%;
+        padding: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+    .favorite-badge i {
+        color: #e53e3e;
+        font-size: 24px;
+    }
+    .product-title {
+        color: #2d3748;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin: 20px 0 10px 0;
+    }
+    .product-price {
+        color: #667eea;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+    .btn-remove {
+        background: #fff5f5;
+        color: #e53e3e;
+        border: 2px solid #e53e3e;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-remove:hover {
+        background: #e53e3e;
+        color: white;
+        transform: translateY(-2px);
+    }
+    .empty-favorites {
+        text-align: center;
+        padding: 100px 20px;
+    }
+    .empty-favorites i {
+        font-size: 120px;
+        color: #fbb6ce;
+        margin-bottom: 30px;
+    }
+    .empty-favorites h3 {
+        color: #718096;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+</style>
+
+{% if products %}
+<div class="favorites-header">
+    <h1 class="favorites-title">❤️ Your Favorites</h1>
+    <p class="favorites-subtitle">{{ products|length }} item{{ products|length|pluralize }} saved</p>
+</div>
+
+<div class="row g-4">
+    {% for product in products %}
+    <div class="col-lg-3 col-md-4 col-sm-6">
+        <div class="card favorite-card">
+            <div class="card-image-wrapper">
+                <img src="{{ product.image.url }}" class="card-img-top w-100 h-100" alt="{{ product.title }}" style="object-fit: cover;">
+                <div class="favorite-badge">
+                    <i class="material-icons">favorite</i>
+                </div>
+            </div>
+            <div class="card-body text-center">
+                <h5 class="product-title">{{ product.title }}</h5>
+                <p class="product-price">${{ product.price }}</p>
+                <a href="{{ product.get_absolute_url }}" class="btn btn-gradient w-100 mb-2">
+                    View Details
+                </a>
+                <a href="{% url 'shop:remove_from_favorites' product.id %}" class="btn btn-remove w-100">
+                    Remove from Favorites
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="empty-favorites">
+    <i class="material-icons">favorite_border</i>
+    <h3>No Favorites Yet!</h3>
+    <p class="text-muted mb-4">Start adding products to your favorites list.</p>
+    <a href="{% url 'shop:home_page' %}" class="btn btn-gradient btn-lg px-5">
+        Explore Products
+    </a>
+</div>
+{% endif %}
+{% endblock %}

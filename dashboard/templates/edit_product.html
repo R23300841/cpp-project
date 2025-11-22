@@ -1,0 +1,29 @@
+
+<!-- edit_product.html - Edit Product -->
+{% extends "dashboard.html" %}
+
+{% block content %}
+<style>
+    .edit-form .form-control, .edit-form .form-select {
+        margin-bottom: 20px;
+    }
+    .edit-form label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 8px;
+    }
+</style>
+
+<div class="edit-form">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <div class="form-group mt-4">
+            <button class="btn btn-primary w-100" type="submit">
+                <i class="material-icons" style="vertical-align: middle;">save</i>
+                Update Product
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
